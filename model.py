@@ -126,6 +126,45 @@ best_model = classifiers[best_model_name]
 print(f"Best Model Found: {best_model_name} with Accuracy: {results[best_model_name]:.4f}")
 
 # %% [markdown]
-# Post Training Visualization
+# Post training visualization
+
+# %%
+print("Visualization: Model Accuracy Comparison")
+names = list(results.keys())
+scores = list(results.values())
+
+plt.figure(figsize=(10,6))
+# Create a bar plot of all model accuracies
+sns.barplot(x=names,y=scores,palette="magma")
+plt.title("Comparison of Classifier Performance (Accuracy)",fontsize=16)
+plt.xlabel("Classifier Model",fontsize=12)
+plt.ylabel("Accuracy Score",fontsize=12)
+plt.ylim(0.8,1.0)
+plt.xticks(rotation=20)
+for i,score in enumerate(scores):
+    plt.text(i, score + 0.005, f"{score:.4f}", ha="center",fontsize=10)
+plt.tight_layout()
+plt.show()
+
+# %%
+# Confusion matrix of the best model 
+best_model.fit(X_train_tfidf,y_train)
+y_pred_best = best_model.predict(X_test_tfidf)
+cm = confusion_matrix(y_test,y_pred_best)
+
+plt.figure(figsize=(8,7))
+# Create a heatmap visualization of the confusion matrix
+sns.heatmap(
+    cm,
+    annot=True,
+    fmt="d",
+    cmap="Blues",
+    xticklabels=CLASS_LABELS.values(),
+    yticklabels=CLASS_LABELS.values()
+)
+plt.title(f"Confusion Matrix for {best_model_name}",fontsize=16)
+plt.xlabel("Predicted Label",fontsize=12)
+plt.ylabel("True Label",fontsize=12)
+plt.show()
 
 
